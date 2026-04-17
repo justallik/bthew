@@ -8,28 +8,60 @@ public class InteractableItem : MonoBehaviour
     [TextArea]
     public string noteContent;
 
+    [Header("Дневник")]
+    [Tooltip("Включи, если этот объект — 3D-модель дневника. При подборе разблокирует вкладку Дневник.")]
+    public bool isDiaryObject = false;
+
     [Header("Квест")]
     [TextArea]
     public string questTextOnPickup; // Заполни в Inspector для нужных предметов
 
     public void Interact()
     {
+        // ── Подбор дневника (3D-модель) ─────────────────────────────────────
+        if (isDiaryObject)
+        {
+            if (DiaryManager.instance != null)
+                DiaryManager.instance.UnlockDiary();
+            else
+                Debug.LogWarning("InteractableItem: DiaryManager не найден в сцене!");
+
+            Debug.Log("📖 Дневник подобран!");
+            TryUpdateQuest();
+            Destroy(gameObject);
+            return;
+        }
+
         if (itemData == null)
         {
             Debug.LogError("InteractableItem: itemData is null!");
             return;
         }
 
-        if (InventorySystemNew.instance == null)
+        // ── Подбор записки → добавляем в дневник ────────────────────────────
+        if (itemData.itemType == ItemData.ItemType.Note)
         {
-            Debug.LogError("InteractableItem: InventorySystemNew.instance is null!");
+            Debug.Log("📝 Записка подобрана: " + itemData.itemName);
+
+            if (DiaryManager.instance != null)
+            {
+                string date = System.DateTime.Now.ToString(DiaryManager.DateFormat);
+                DiaryManager.instance.AddEntry(itemData.itemName, noteContent, date);
+            }
+            else
+            {
+                Debug.LogWarning("InteractableItem: DiaryManager не найден — запись не добавлена в дневник.");
+            }
+
+            TryUpdateQuest();
+            Destroy(gameObject);
             return;
         }
 
-        if (itemData.itemType == ItemData.ItemType.Note)
+        // ── Обычный предмет → в инвентарь ───────────────────────────────────
+        if (InventorySystemNew.instance == null)
         {
-            Debug.Log("📝 Читаем записку: " + noteContent);
-            TryUpdateQuest(); // квест тоже можно обновить при чтении записки
+            Debug.LogError("InteractableItem: InventorySystemNew.instance is null!");
             return;
         }
 
@@ -38,7 +70,7 @@ public class InteractableItem : MonoBehaviour
         if (success)
         {
             Debug.Log("✅ Подобрано: " + itemData.itemName);
-            TryUpdateQuest(); // обновляем задание если оно задано
+            TryUpdateQuest();
             Destroy(gameObject);
         }
         else

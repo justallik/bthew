@@ -46,6 +46,9 @@ public class InventoryUINew : MonoBehaviour
         
         if (InventorySystemNew.instance != null) 
             InventorySystemNew.instance.inventoryChanged += OnInventoryChanged;
+
+        if (DiaryManager.instance != null)
+            DiaryManager.instance.onDiaryChanged += OnDiaryStateChanged;
         
         // Привязываем кнопку "Дневник"
         if (btnShowDiary != null)
@@ -66,6 +69,9 @@ public class InventoryUINew : MonoBehaviour
     {
         if (InventorySystemNew.instance != null) 
             InventorySystemNew.instance.inventoryChanged -= OnInventoryChanged;
+
+        if (DiaryManager.instance != null)
+            DiaryManager.instance.onDiaryChanged -= OnDiaryStateChanged;
         
         if (btnShowDiary != null)
         {
@@ -83,6 +89,17 @@ public class InventoryUINew : MonoBehaviour
     private void OnInventoryChanged()
     {
         if (isOpen) UpdateInventoryDisplay();
+    }
+
+    // Срабатывает когда DiaryManager меняет состояние (разблокировка / новая запись)
+    private void OnDiaryStateChanged()
+    {
+        if (isOpen && inventoryPanel != null && inventoryPanel.activeSelf)
+        {
+            // Обновляем видимость кнопки дневника если открыта вкладка инвентаря
+            bool diaryUnlocked = DiaryManager.instance != null && DiaryManager.instance.IsUnlocked();
+            if (btnShowDiary != null) btnShowDiary.SetActive(diaryUnlocked);
+        }
     }
 
     private void Update()
@@ -186,8 +203,11 @@ public class InventoryUINew : MonoBehaviour
     {
         if (inventoryPanel != null) inventoryPanel.SetActive(true);
         if (diaryPanel != null) diaryPanel.SetActive(false);
+
+        // Кнопка дневника видна только если дневник разблокирован
+        bool diaryUnlocked = DiaryManager.instance != null && DiaryManager.instance.IsUnlocked();
         if (btnShowInventory != null) btnShowInventory.SetActive(false);
-        if (btnShowDiary != null) btnShowDiary.SetActive(true);
+        if (btnShowDiary != null) btnShowDiary.SetActive(diaryUnlocked);
         
         UpdateInventoryDisplay(); 
     }
@@ -198,6 +218,9 @@ public class InventoryUINew : MonoBehaviour
         if (diaryPanel != null) diaryPanel.SetActive(true);
         if (btnShowInventory != null) btnShowInventory.SetActive(true);
         if (btnShowDiary != null) btnShowDiary.SetActive(false);
+
+        // Уведомляем DiaryUI что вкладка открыта
+        if (DiaryUI.instance != null) DiaryUI.instance.OnTabOpened();
     }
 
     public bool IsOpen() => isOpen;
