@@ -1,0 +1,49 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+*.log
+*.utmp
+
+# Visual Studio
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+
+# Большие 3D файлы
+*.fbx
+*.max
+*.obj
+*.3ds
+*.blend
+*.dae
+
+# Текстуры
+*.psd
+*.tga
+*.tif
+*.tiff
+*.exr
+*.hdr
+
+# Аудио
+*.wav
+*.mp3
+*.ogg
+*.aiff
+
+# Специфичные папки этого проекта
+Assets/dahsa/
+Assets/TENKOKU*/
+Assets/TextMesh*/
+Assets/TutorialInfo/
+Assets/_Recovery/
