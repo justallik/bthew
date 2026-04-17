@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517d5045d6f128641af7d1720a6b0585, type: 3}
+  m_Name: Leaf
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: Leaf
+  itemType: 2
+  weaponSlotType: 0
+  maxStackSize: 5
+  healAmount: 10
+  itemIcon: {fileID: 21300000, guid: 8e6a575acdd965e41b697cee9d74684d, type: 3}
+  hotbarIcon: {fileID: 21300000, guid: e61bdd0e5b000784a84b086959f6c3d3, type: 3}
