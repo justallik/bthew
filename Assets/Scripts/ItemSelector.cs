@@ -108,12 +108,25 @@ public class ItemSelector : MonoBehaviour
 
     private void UpdateItemUI()
     {
-        if (currentItem == null || currentItem.itemData == null) return;
+        if (currentItem == null) return;
 
-        string actionText = (currentItem.itemData.itemType == ItemData.ItemType.Note) ? "Прочитать " : "Взять ";
+        string promptText;
+
+        if (currentItem.isDiaryObject)
+        {
+            // 3D-модель дневника — особый текст
+            string diaryName = (currentItem.itemData != null) ? currentItem.itemData.itemName : "Дневник";
+            promptText = "[E] Подобрать " + diaryName;
+        }
+        else
+        {
+            if (currentItem.itemData == null) return;
+            string actionText = (currentItem.itemData.itemType == ItemData.ItemType.Note) ? "Подобрать " : "Взять ";
+            promptText = "[E] " + actionText + currentItem.itemData.itemName;
+        }
 
         if (tmpText != null)
-            tmpText.text = "[E] " + actionText + currentItem.itemData.itemName;
+            tmpText.text = promptText;
 
         if (promptUI != null)
             promptUI.SetActive(true);
